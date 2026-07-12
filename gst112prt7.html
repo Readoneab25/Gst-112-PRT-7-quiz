@@ -1,0 +1,515 @@
+
+
+
+
+
+
+
+
+
+
+
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sanctum Quiz</title>
+  <style>
+    :root{--bg:#0f172a;--card:#111827;--accent:#06b6d4;--muted:#94a3b8;--white:#e6eef6}
+    html,body{height:100%}
+    body{margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background: #1E1B4B;color:#FFFF;-webkit-font-smoothing:antialiased}
+    .wrap{max-width:920px;margin:28px auto;padding:20px}
+    header{display:flex;align-items:center;gap:16px}
+    h1{margin:0;}
+    .meta{color:var(--muted);font-size:13px}
+    .card{background: #312E81;padding:20px;border-radius:12px;margin-top:18px;box-shadow:0 6px 24px rgba(2,6,23,0.6)}
+    .question{font-size:18px;margin-bottom:12px}
+    .choices{display:flex;flex-direction:column;gap:8px}
+    .choice{background: #4338CA;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);cursor:pointer}
+    .choice:hover{transform:translateY(-2px)}
+    .choice.selected{outline:3px solid rgba(6,182,212,0.12);background: #22D3EE;}
+    .controls{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+    button{background:#C084FC;color:#042029;border:0;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600}
+    button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--white)}
+    .progress{height:10px;background:rgba(255,255,255,0.04);border-radius:999px;overflow:hidden}
+    .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#22D3EE);width:0%}
+    .footer{margin-top:16px;color:var(--muted);font-size:13px}
+    .result{padding:18px;border-radius:10px;background:linear-gradient(180deg, rgba(2,6,23,0.85), rgba(2,6,23,0.6));}
+    .review{margin-top:12px}
+    .q-review{background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;margin-bottom:10px}
+    @media(max-width:560px){.wrap{padding:12px}h1{font-size:18px}.question{font-size:16px}}
+    .timer{ 
+    color:#FBBF24;
+    
+    }
+    .span{
+        display:flex;
+        font-size: 25px ;
+        float:right;
+    }
+    .h1{
+        font-size:25px
+    }
+    
+    
+    
+    body.light-mode{
+  background:#f1f5f9;
+  color:#0f172a;
+}
+body.light-mode .card{background:#ffffff;}
+body.light-mode .choice{background:#e2e8f0;color:#0f172a;}
+body.light-mode .choice.selected{background:#3b82f6;color:white;}
+body.light-mode button{background:#22c55e;color:white;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1 class="h1">GST 112 MCQs Interactive MCQ Quiz PRT7</h1>
+        <div class="meta">30 multiple-choice questions </div>
+ 
+                 <span class="span">Timer: <div class="timer" id="countdown-timer">15:00</div></span>
+      </div>
+    </header><div class="card" id="name-card">
+  <div class="question">Enter your name to begin</div>
+  <input type="text" id="nameInput" placeholder="Enter your name here" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:#4338CA;color:#fff;font-size:16px;box-sizing:border-box" />
+  <div style="margin-top:12px">
+  <div class="question">Enter your Institution name</div>
+  <input type="text" id="institutionInput" placeholder="Enter your institution name here" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:#4338CA;color:#fff;font-size:16px;box-sizing:border-box" />
+</div>
+  <div style="margin-top:12px">
+    <button id="startQuizBtn">Start Quiz</button>
+  </div>
+</div>
+
+<div class="card" id="quiz-card" style="display:none">
+  <div class="progress" aria-hidden><i id="progress-bar"></i></div>
+  <div style="height:14px"></div>
+  <div id="q-area">
+    </div>
+
+  <div class="controls">
+    <div style="display:flex;gap:8px">
+      <button id="prevBtn" class="secondary">Previous</button>
+      <button id="nextBtn">Next</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button id="submitBtn" class="secondary">Submit</button>
+      <div style="color:var(--muted);font-size:13px">Q <span id="q-num">1</span> / <span id="q-total">10</span></div>
+    </div>
+  </div>
+
+  <div class="footer">Tip: Select an answer and press Next. You can review answers after submission. Quiz will submit automatically once timer turns zero.<br></div>
+</div>
+
+<div id="result-area" style="display:none" class="card">
+  <div class="result">
+    <h2 id="score-title"></h2>
+    <p id="score-summary" class="meta"></p>
+  </div>
+  <div class="review" id="review-list"></div>
+  <div style="display:flex;gap:8px;margin-top:12px">
+    <button id="retryBtn">Retake Quiz</button>
+    <button id="exportBtn" class="secondary">Export Results</button>
+  </div>
+</div>
+<br><br><br>
+  <a href="https://wa.me/+2349036795652"><button>Contact The Developer</button></a>
+    <a href="https://wa.me/+2349036795652"><button>Support QuizProject</button></a><br><br>
+   <button onclick="shareOnWhatsApp()">Share Quiz link via WhatsApp</button>
+  <h2>Designed by Sanctum</h2>
+  </div>
+   <script>
+       
+       
+
+
+
+
+       const QUESTIONS = [
+
+
+
+
+
+
+
+{
+    q: "Who was the first Governor-General of Nigeria after independence?",
+    c: ["Lord Lugard", "Nnamdi Azikiwe", "Ahmadu Bello", "Tafawa Balewa"],
+    a: 1
+  },
+  {
+    q: "The first military coup was plotted by?",
+    c: ["Ahmadu Bello", "Major Patrick Nzeogwu (January 15, 1966)", "Yakubu Gowon", "Sani Abacha"],
+    a: 1
+  },
+  {
+    q: "What year was the first military coup?",
+    c: ["1960", "1966 (January 15)", "1975", "1983"],
+    a: 1
+  },
+  {
+    q: "NYSC was established in what year?",
+    c: ["1960", "1973 (July 2)", "1976", "1996"],
+    a: 1
+  },
+  {
+    q: "What are the 3Rs after the civil war?",
+    c: ["Redemption, Reconciliation, Re-orientation", "Reconstruction, Rehabilitation, Reconciliation", "Revolution, Reform, Renewal", "Rights, Rule, Republic"],
+    a: 1
+  },
+  {
+    q: "The civil war lasted from?",
+    c: ["1960-1963", "July 6, 1967 to January 12, 1970", "1979-1983", "1993-1998"],
+    a: 1
+  },
+
+  // SECTION 12: SOCIAL JUSTICE, LAW & JUDICIARY
+  {
+    q: "What body interprets the Nigerian Constitution?",
+    c: ["The Executive", "The Legislature", "The Judiciary", "The Military"],
+    a: 2
+  },
+  {
+    q: "#EndSARS (2020) was protest against?",
+    c: ["Corruption", "Police brutality (by SARS – Special Anti-Robbery Squad)", "Election rigging", "Economic policy"],
+    a: 1
+  },
+  {
+    q: "EFCC and ICPC fight against?",
+    c: ["Police brutality", "Corruption", "Ethnic conflict", "Religious extremism"],
+    a: 1
+  },
+
+  // SECTION 13: TRADE, MARKETS & APPRENTICESHIP
+  {
+    q: "What is trade?",
+    c: ["Only export", "Sale, transfer or exchange of goods and services for cash or credit", "Barter only", "Import only"],
+    a: 1
+  },
+  {
+    q: "The Igbo apprenticeship system is called?",
+    c: ["Sarauta", "Igba Boi", "Omoluabi", "Ase"],
+    a: 1
+  },
+  {
+    q: "Igba boyi / Igba Boi refers to?",
+    c: ["Fishing", "Apprenticeship (Igbo system)", "Horsemanship", "Divination"],
+    a: 1
+  },
+  {
+    q: "What does the master give the Igbo apprentice at the end?",
+    c: ["Title", "Capital (money/goods) to start own business", "Land", "Wife"],
+    a: 1
+  },
+
+  // MASTER CHEAT SHEET QUESTIONS
+  {
+    q: "First political party in Nigeria",
+    c: ["NCNC", "NNDP (1922/23) – Herbert Macaulay", "AG", "NPC"],
+    a: 1
+  },
+  {
+    q: "First prime minister",
+    c: ["Nnamdi Azikiwe", "Abubakar Tafawa Balewa", "Obafemi Awolowo", "Ahmadu Bello"],
+    a: 1
+  },
+  {
+    q: "First president / governor-general",
+    c: ["Tafawa Balewa", "Nnamdi Azikiwe", "Lord Lugard", "Yakubu Gowon"],
+    a: 1
+  },
+  {
+    q: "Name 'Nigeria' coined by",
+    c: ["Lord Lugard", "Miss Flora Shaw (1897, The Times)", "Herbert Macaulay", "Flora Shaw's husband"],
+    a: 1
+  },
+  {
+    q: "Amalgamation year",
+    c: ["1906", "1914 (January 1)", "1922", "1946"],
+    a: 1
+  },
+  {
+    q: "Independence year",
+    c: ["1963", "1960 (October 1)", "1970", "1954"],
+    a: 1
+  },
+  {
+    q: "Republic year",
+    c: ["1960", "1963", "1979", "1999"],
+    a: 1
+  },
+  {
+    q: "Yoruba thunder god",
+    c: ["Ogun", "Sango", "Orunmila", "Obatala"],
+    a: 1
+  },
+  {
+    q: "Yoruba water deity",
+    c: ["Yemoja", "Osun", "Oya", "Ala"],
+    a: 1
+  },
+  {
+    q: "Igbo supreme god",
+    c: ["Olodumare", "Chukwu", "Amadioha", "Sango"],
+    a: 1
+  },
+  {
+    q: "Indirect rule worked in",
+    c: ["East", "North (failed in East/South)", "West", "South"],
+    a: 1
+  },
+  {
+    q: "Aba Women's Riot year",
+    c: ["1922", "1929", "1901", "1897"],
+    a: 1
+  }
+ 
+];
+
+       function shareOnWhatsApp() {
+  const message = "https://generalhealthandwellness.com/category/questions-interactive-quiz-guide";
+  const encodedMessage = encodeURIComponent(message);
+  const whatsappUrl = "whatsapp://send?text=" + encodedMessage;
+  window.open(whatsappUrl, '_blank');
+}
+
+let state = { idx: 0, answers: Array(QUESTIONS.length).fill(null), studentName: '', institution: '' };
+const total = QUESTIONS.length;
+
+function renderQuestion() {
+  const area = document.getElementById('q-area');
+  const q = QUESTIONS[state.idx];
+  document.getElementById('q-num').textContent = state.idx + 1;
+  document.getElementById('q-total').textContent = total;
+  const progress = Math.round((state.idx / total) * 100);
+  document.getElementById('progress-bar').style.width = progress + '%';
+
+  area.innerHTML = '';
+  const qEl = document.createElement('div');
+  qEl.innerHTML = `<div class="question">${state.idx + 1}. ${q.q}</div>`;
+  const choices = document.createElement('div');
+  choices.className = 'choices';
+
+  q.c.forEach((choice, i) => {
+    const btn = document.createElement('div');
+    btn.className = 'choice';
+    btn.textContent = String.fromCharCode(65 + i) + '. ' + choice;
+    if (state.answers[state.idx] === i) btn.classList.add('selected');
+
+    btn.addEventListener('click', () => {
+      state.answers[state.idx] = i;
+      document.querySelectorAll('.choice').forEach(el => el.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+
+    choices.appendChild(btn);
+  });
+
+  qEl.appendChild(choices);
+  area.appendChild(qEl);
+}
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+  if (state.idx < total - 1) state.idx++;
+  renderQuestion();
+});
+
+document.getElementById('prevBtn').addEventListener('click', () => {
+  if (state.idx > 0) state.idx--;
+  renderQuestion();
+});
+
+document.getElementById('submitBtn').addEventListener('click', () => {
+  const unanswered = state.answers.filter(a => a === null).length;
+  if (unanswered > 0) {
+    if (!confirm(`You have ${unanswered} unanswered questions. Submit anyway?`)) return;
+  }
+  gradeQuiz();
+});
+
+function gradeQuiz() {
+  clearInterval(timerInterval); // stop timer
+
+  let correct = 0;
+  const review = [];
+
+  for (let i = 0; i < total; i++) {
+    const user = state.answers[i];
+    const correctIdx = QUESTIONS[i].a;
+    const ok = user === correctIdx;
+    if (ok) correct++;
+    review.push({ i, q: QUESTIONS[i].q, choices: QUESTIONS[i].c, user, correctIdx, ok });
+  }
+
+  showResult(correct, review);
+}
+
+const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLScq5wNi59xRM2ujpPIi1CZIT81UFoX5NPrNvfTmFNMYLvUUHw/formResponse";
+const FORM_ENTRY_SCORE = "entry.674447700";
+const FORM_ENTRY_PERCENT = "entry.1260887180";
+const FORM_ENTRY_TIMESTAMP = "entry.224827699";
+const FORM_ENTRY_NAME = "entry.1180765172";
+const FORM_ENTRY_INSTITUTION = "entry.2075405552";  
+const FORM_ENTRY_QUIZNAME = "entry.1279383919";
+const QUIZ_NAME = "GST 112 PRT 7"; // <-- change this per quiz if you reuse this file as a template
+
+function sendScoreToAdmin(score, pct) {
+formData.append(FORM_ENTRY_INSTITUTION, state.institution);
+  const formData = new FormData();
+  formData.append(FORM_ENTRY_NAME, state.studentName || "Unknown");
+  formData.append(FORM_ENTRY_SCORE, `${score} / ${total}`);
+  formData.append(FORM_ENTRY_PERCENT, `${pct}%`);
+  formData.append(FORM_ENTRY_TIMESTAMP, new Date().toLocaleString());
+  formData.append(FORM_ENTRY_QUIZNAME, QUIZ_NAME);
+
+  fetch(GOOGLE_FORM_ACTION, {
+    method: "POST",
+    mode: "no-cors",
+    body: formData
+  }).catch(err => console.error("Score submission failed:", err));
+}
+
+function showResult(score, review) {
+  document.getElementById('quiz-card').style.display = 'none';
+  const area = document.getElementById('result-area');
+  area.style.display = 'block';
+
+  document.getElementById('score-title').textContent = `You scored ${score} out of ${total}`;
+  const pct = Math.round((score / total) * 100);
+  document.getElementById('score-summary').textContent = `Percentage: ${pct}%`;
+
+  sendScoreToAdmin(score, pct);
+  window._lastReview = review;
+  window._lastScore = score;
+  window._lastPct = pct;
+
+  const list = document.getElementById('review-list');
+  list.innerHTML = '';
+
+  review.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'q-review';
+    const head = document.createElement('div');
+    head.style.fontWeight = '700';
+    head.textContent = `${item.i + 1}. ${item.q}`;
+    const userAns = document.createElement('div');
+    const ua = item.user === null ? 'No answer' : String.fromCharCode(65 + item.user) + '. ' + item.choices[item.user];
+    const ca = String.fromCharCode(65 + item.correctIdx) + '. ' + item.choices[item.correctIdx];
+    userAns.innerHTML = `<div><strong>Your answer:</strong> ${ua}</div><div><strong>Correct:</strong> ${ca}</div>`;
+    userAns.style.color = item.ok ? 'lightgreen' : '#fca5a5';
+    div.appendChild(head);
+    div.appendChild(userAns);
+    list.appendChild(div);
+  });
+}
+
+/* ---------------- TIMER ---------------- */
+let totalSeconds = 15* 60; 
+const countdownEl = document.getElementById('countdown-timer');
+let timerInterval = null;
+let warned = false;
+
+//  Warning sound
+function playWarningSound() {
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const osc = ctx.createOscillator();
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(800, ctx.currentTime);
+  osc.connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + 0.5);
+}
+
+function startCountdown() {
+  timerInterval = setInterval(() => {
+    let mins = Math.floor(totalSeconds / 60);
+    let secs = totalSeconds % 60;
+    countdownEl.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    totalSeconds--;
+
+    if (totalSeconds === 300 && !warned) { // 5 minutes left
+      playWarningSound();
+      alert("⚠️ 5 minutes remaining!");
+      warned = true;
+    }
+
+    if (totalSeconds < 0) {
+      clearInterval(timerInterval);
+      gradeQuiz();
+    }
+  }, 1000);
+}
+
+/* ---------------- LIGHT MODE ---------------- */
+const toggleBtn = document.createElement("button");
+toggleBtn.textContent = "☀️";
+toggleBtn.style.marginLeft = "10px";
+document.querySelector("header").appendChild(toggleBtn);
+
+toggleBtn.addEventListener("click", () => {
+  document.body.classList.toggle("light-mode");
+});
+
+/* Export */
+document.getElementById('exportBtn')?.addEventListener('click', () => {
+  const review = window._lastReview || [];
+  const score = window._lastScore ?? 0;
+  const pct = window._lastPct ?? 0;
+  let text = `PHY 102 Quiz Results\nScore: ${score} / ${total} (${pct}%)\nDate: ${new Date().toLocaleString()}\n\n`;
+  review.forEach(item => {
+    const ua = item.user === null ? 'No answer' : String.fromCharCode(65 + item.user) + '. ' + item.choices[item.user];
+    const ca = String.fromCharCode(65 + item.correctIdx) + '. ' + item.choices[item.correctIdx];
+    text += `${item.i + 1}. ${item.q}\nYour answer: ${ua}\nCorrect answer: ${ca}\nResult: ${item.ok ? 'Correct' : 'Incorrect'}\n\n`;
+  });
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'phy102-quiz-results.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+/* Reset */
+document.getElementById('retryBtn')?.addEventListener('click', () => {
+  state = { idx: 0, answers: Array(total).fill(null), studentName: '' };
+  document.getElementById('result-area').style.display = 'none';
+  document.getElementById('quiz-card').style.display = 'none';
+  document.getElementById('name-card').style.display = 'block';
+  document.getElementById('nameInput').value = '';
+  totalSeconds = 30 * 60;
+  warned = false;
+});
+
+document.getElementById('startQuizBtn').addEventListener('click', () => {
+  const nameVal = document.getElementById('nameInput').value.trim();
+  const institutionVal = document.getElementById('institutionInput').value.trim();
+state.institution = institutionVal || "Not provided";
+  if (!nameVal) {
+  alert('Please enter your name to begin.');
+  return;
+}
+
+if (!institutionVal) {
+  alert('Please enter your institution to begin.');
+  return;
+}
+  state.studentName = nameVal;
+  document.getElementById('name-card').style.display = 'none';
+  document.getElementById('quiz-card').style.display = 'block';
+  renderQuestion();
+  startCountdown();
+});
+</script>
+      
+</body>
+</html>
+
