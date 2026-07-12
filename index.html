@@ -360,9 +360,10 @@ const FORM_ENTRY_QUIZNAME = "entry.1279383919";
 const QUIZ_NAME = "GST 112 PRT 7"; // <-- change this per quiz if you reuse this file as a template
 
 function sendScoreToAdmin(score, pct) {
-formData.append(FORM_ENTRY_INSTITUTION, state.institution);
   const formData = new FormData();
+  
   formData.append(FORM_ENTRY_NAME, state.studentName || "Unknown");
+  formData.append(FORM_ENTRY_INSTITUTION, state.institution || "Not provided");
   formData.append(FORM_ENTRY_SCORE, `${score} / ${total}`);
   formData.append(FORM_ENTRY_PERCENT, `${pct}%`);
   formData.append(FORM_ENTRY_TIMESTAMP, new Date().toLocaleString());
@@ -374,7 +375,6 @@ formData.append(FORM_ENTRY_INSTITUTION, state.institution);
     body: formData
   }).catch(err => console.error("Score submission failed:", err));
 }
-
 function showResult(score, review) {
   document.getElementById('quiz-card').style.display = 'none';
   const area = document.getElementById('result-area');
@@ -410,7 +410,7 @@ function showResult(score, review) {
 }
 
 /* ---------------- TIMER ---------------- */
-let totalSeconds = 15* 60; 
+let totalSeconds = 12* 60; 
 const countdownEl = document.getElementById('countdown-timer');
 let timerInterval = null;
 let warned = false;
@@ -456,12 +456,11 @@ toggleBtn.addEventListener("click", () => {
   document.body.classList.toggle("light-mode");
 });
 
-/* Export */
-document.getElementById('exportBtn')?.addEventListener('click', () => {
+/* Export */document.getElementById('exportBtn')?.addEventListener('click', () => {
   const review = window._lastReview || [];
   const score = window._lastScore ?? 0;
   const pct = window._lastPct ?? 0;
-  let text = `PHY 102 Quiz Results\nScore: ${score} / ${total} (${pct}%)\nDate: ${new Date().toLocaleString()}\n\n`;
+  let text = `${QUIZ_NAME} Quiz Results\nScore: ${score} / ${total} (${pct}%)\nDate: ${new Date().toLocaleString()}\n\n`;
   review.forEach(item => {
     const ua = item.user === null ? 'No answer' : String.fromCharCode(65 + item.user) + '. ' + item.choices[item.user];
     const ca = String.fromCharCode(65 + item.correctIdx) + '. ' + item.choices[item.correctIdx];
@@ -471,7 +470,7 @@ document.getElementById('exportBtn')?.addEventListener('click', () => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'phy102-quiz-results.txt';
+  a.download = `${QUIZ_NAME.replace(/\s+/g, '-').toLowerCase()}-results.txt`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -480,12 +479,13 @@ document.getElementById('exportBtn')?.addEventListener('click', () => {
 
 /* Reset */
 document.getElementById('retryBtn')?.addEventListener('click', () => {
-  state = { idx: 0, answers: Array(total).fill(null), studentName: '' };
+  state = { idx: 0, answers: Array(total).fill(null), studentName: '', institution: '' };
   document.getElementById('result-area').style.display = 'none';
   document.getElementById('quiz-card').style.display = 'none';
   document.getElementById('name-card').style.display = 'block';
   document.getElementById('nameInput').value = '';
-  totalSeconds = 30 * 60;
+  document.getElementById('institutionInput').value = '';
+  totalSeconds = 12 * 60;
   warned = false;
 });
 
@@ -494,14 +494,9 @@ document.getElementById('startQuizBtn').addEventListener('click', () => {
   const institutionVal = document.getElementById('institutionInput').value.trim();
 state.institution = institutionVal || "Not provided";
   if (!nameVal) {
-  alert('Please enter your name to begin.');
-  return;
-}
-
-if (!institutionVal) {
-  alert('Please enter your institution to begin.');
-  return;
-}
+    alert('Please enter your name to begin.');
+    return;
+  }
   state.studentName = nameVal;
   document.getElementById('name-card').style.display = 'none';
   document.getElementById('quiz-card').style.display = 'block';
