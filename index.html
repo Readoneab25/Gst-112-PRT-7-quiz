@@ -355,8 +355,10 @@ const SUPABASE_URL = "https://mgmckntsfukikkmwdsee.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_msspxVHxSKf9lZ6oXR-nbw_Ds3QLUTM";
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-const QUIZ_ID = "gst-112-prt-7";
-const QUIZ_NAME = "GST 112 PRT 7";
+// The reusable configuration is loaded from quiz-config.js.
+// This keeps quiz identity/settings separate from the quiz engine.
+const QUIZ_ID = QUIZ_CONFIG.id;
+const QUIZ_NAME = QUIZ_CONFIG.title;
 
 async function submitResult(score, pct, review) {
   const answers = review.map(function(item) {
@@ -428,7 +430,7 @@ function showResult(score, review) {
 }
 
 /* ---------------- TIMER ---------------- */
-let totalSeconds = 12* 60; 
+let totalSeconds = QUIZ_CONFIG.timeMinutes * 60; 
 const countdownEl = document.getElementById('countdown-timer');
 let timerInterval = null;
 let warned = false;
@@ -503,7 +505,7 @@ document.getElementById('retryBtn')?.addEventListener('click', () => {
   document.getElementById('name-card').style.display = 'block';
   document.getElementById('nameInput').value = '';
   document.getElementById('institutionInput').value = '';
-  totalSeconds = 12 * 60;
+  totalSeconds = QUIZ_CONFIG.timeMinutes * 60;
   warned = false;
 });
 
