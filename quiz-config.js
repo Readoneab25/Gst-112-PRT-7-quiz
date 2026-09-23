@@ -14,8 +14,8 @@ const QUIZ_CONFIG = {
   quizNumber: "PRT 7",
 
   // Tutor / tutorial branding.
-  tutorName: "Sanctum",
-  logo: "",
+  tutorName: "JAMB Vanguard Academy",
+  logo: "logo.svg",
 
   // Quiz settings.
   timeMinutes: 12,
