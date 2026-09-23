@@ -273,7 +273,7 @@ body.light-mode button{background:#22c55e;color:white;}
 ];
 
        function shareOnWhatsApp() {
-  const message = "https://generalhealthandwellness.com/category/questions-interactive-quiz-guide";
+  const message = window.location.href;
   const encodedMessage = encodeURIComponent(message);
   const whatsappUrl = "whatsapp://send?text=" + encodedMessage;
   window.open(whatsappUrl, '_blank');
@@ -350,31 +350,37 @@ function gradeQuiz() {
   showResult(correct, review);
 }
 
-const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLScq5wNi59xRM2ujpPIi1CZIT81UFoX5NPrNvfTmFNMYLvUUHw/formResponse";
-const FORM_ENTRY_SCORE = "entry.674447700";
-const FORM_ENTRY_PERCENT = "entry.1260887180";
-const FORM_ENTRY_TIMESTAMP = "entry.224827699";
-const FORM_ENTRY_NAME = "entry.1180765172";
-const FORM_ENTRY_INSTITUTION = "entry.2075405552";  
-const FORM_ENTRY_QUIZNAME = "entry.1279383919";
-const QUIZ_NAME = "GST 112 PRT 7"; // <-- change this per quiz if you reuse this file as a template
+const SUPABASE_URL = "https://mgmckntsfukikkmwdsee.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_msspxVHxSKf9lZ6oXR-nbw_Ds3QLUTM";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
-function sendScoreToAdmin(score, pct) {
-  const formData = new FormData();
-  
-  formData.append(FORM_ENTRY_NAME, state.studentName || "Unknown");
-  formData.append(FORM_ENTRY_INSTITUTION, state.institution || "Not provided");
-  formData.append(FORM_ENTRY_SCORE, `${score} / ${total}`);
-  formData.append(FORM_ENTRY_PERCENT, `${pct}%`);
-  formData.append(FORM_ENTRY_TIMESTAMP, new Date().toLocaleString());
-  formData.append(FORM_ENTRY_QUIZNAME, QUIZ_NAME);
+const QUIZ_ID = "gst-112-prt-7";
+const QUIZ_NAME = "GST 112 PRT 7";
 
-  fetch(GOOGLE_FORM_ACTION, {
-    method: "POST",
-    mode: "no-cors",
-    body: formData
-  }).catch(err => console.error("Score submission failed:", err));
+async function submitResult(score, pct, review) {
+  const answers = review.map(function(item) {
+    return { question: item.i, selected: item.user };
+  });
+
+  const { data, error } = await supabaseClient.rpc("submit_quiz_result", {
+    p_quiz_id: QUIZ_ID,
+    p_quiz_name: QUIZ_NAME,
+    p_student_name: state.studentName || "Unknown",
+    p_institution: state.institution || "Not provided",
+    p_score: score,
+    p_total_questions: total,
+    p_percentage: pct,
+    p_answers: answers
+  });
+
+  if (error) {
+    console.error("Quiz result submission failed:", error);
+    return null;
+  }
+
+  return data && data[0] ? data[0] : null;
 }
+
 function showResult(score, review) {
   document.getElementById('quiz-card').style.display = 'none';
   const area = document.getElementById('result-area');
