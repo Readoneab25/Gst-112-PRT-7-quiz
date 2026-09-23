@@ -17,57 +17,135 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Sanctum Quiz</title>
   <style>
-    :root{--bg:#0f172a;--card:#111827;--accent:#06b6d4;--muted:#94a3b8;--white:#e6eef6}
-    html,body{height:100%}
-    body{margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background:var(--quiz-bg,#1E1B4B);color:#FFFF;-webkit-font-smoothing:antialiased}
-    .wrap{max-width:920px;margin:28px auto;padding:20px}
-    header{display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .brand{display:flex;align-items:center;gap:14px;min-width:0}
-    .brand-logo-wrap{width:72px;height:72px;display:flex;align-items:center;justify-content:center;flex:none}
-    .brand-logo{width:72px;height:72px;object-fit:contain;border-radius:50%;background:#fff}
-    .brand-tutor{margin-top:4px;font-size:13px;color:#cbd5e1;font-weight:600}
+    :root{
+      --bg:#0f172a;
+      --card:#312E81;
+      --accent:#22D3EE;
+      --muted:#cbd5e1;
+      --white:#f8fafc;
+      --line:rgba(255,255,255,.10);
+    }
+    *{box-sizing:border-box}
+    html,body{min-height:100%}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      background:var(--quiz-bg,#1E1B4B);
+      color:var(--white);
+      -webkit-font-smoothing:antialiased;
+    }
+    button,input{font:inherit}
+    .wrap{max-width:960px;margin:0 auto;padding:24px 18px 42px}
 
-    h1{margin:0;}
-    .meta{color:var(--muted);font-size:13px}
-    .card{background:var(--quiz-card,#312E81);padding:20px;border-radius:12px;margin-top:18px;box-shadow:0 6px 24px rgba(2,6,23,0.6)}
-    .question{font-size:18px;margin-bottom:12px}
-    .choices{display:flex;flex-direction:column;gap:8px}
-    .choice{background:var(--quiz-choice,#4338CA);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);cursor:pointer}
-    .choice:hover{transform:translateY(-2px)}
-    .choice.selected{outline:3px solid rgba(6,182,212,0.12);background:var(--quiz-accent,#22D3EE);}
-    .controls{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
-    button{background:var(--quiz-button,#C084FC);color:#042029;border:0;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600}
-    button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--white)}
-    .progress{height:10px;background:rgba(255,255,255,0.04);border-radius:999px;overflow:hidden}
-    .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#22D3EE);width:0%}
-    .footer{margin-top:16px;color:var(--muted);font-size:13px}
-    .result{padding:18px;border-radius:10px;background:linear-gradient(180deg, rgba(2,6,23,0.85), rgba(2,6,23,0.6));}
-    .review{margin-top:12px}
-    .q-review{background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;margin-bottom:10px}
-    @media(max-width:560px){.wrap{padding:12px}h1{font-size:18px}.question{font-size:16px}}
-    .timer{ 
-    color:#FBBF24;
-    
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      padding:18px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:rgba(15,23,42,.45);
+      box-shadow:0 10px 30px rgba(2,6,23,.22);
     }
-    .span{
-        display:flex;
-        font-size: 25px ;
-        float:right;
+    .brand{display:flex;align-items:center;gap:14px;min-width:0}
+    .brand-logo-wrap{
+      width:64px;height:64px;display:flex;align-items:center;justify-content:center;flex:none;
     }
-    .h1{
-        font-size:25px
+    .brand-logo{
+      width:64px;height:64px;object-fit:contain;border-radius:14px;background:#fff;
     }
-    
-    
-    
-    body.light-mode{
-  background:#f1f5f9;
-  color:#0f172a;
-}
-body.light-mode .card{background:#ffffff;}
-body.light-mode .choice{background:#e2e8f0;color:#0f172a;}
-body.light-mode .choice.selected{background:#3b82f6;color:white;}
-body.light-mode button{background:#22c55e;color:white;}
+    .brand-copy{min-width:0}
+    .h1{margin:0;font-size:clamp(20px,3vw,28px);line-height:1.15}
+    .meta{margin-top:7px;color:var(--muted);font-size:13px}
+    .brand-tutor{margin-top:5px;font-size:13px;font-weight:700;color:#f8fafc}
+    .quiz-status{display:flex;align-items:center;gap:10px;flex:none}
+    .timer-box{
+      min-width:112px;padding:9px 12px;border-radius:12px;
+      border:1px solid rgba(251,191,36,.25);
+      background:rgba(251,191,36,.08);
+      text-align:center;
+    }
+    .timer-label{display:block;font-size:11px;color:#fde68a;text-transform:uppercase;letter-spacing:.08em}
+    .timer{display:block;color:#FBBF24;font-weight:800;font-size:20px;margin-top:2px}
+
+    .card{
+      background:var(--quiz-card,#312E81);
+      padding:22px;
+      border-radius:18px;
+      margin-top:18px;
+      border:1px solid var(--line);
+      box-shadow:0 10px 30px rgba(2,6,23,.24);
+    }
+    .intro-card{text-align:left}
+    .eyebrow{
+      display:inline-block;padding:5px 9px;border-radius:999px;
+      background:rgba(34,211,238,.12);color:#67e8f9;font-size:11px;font-weight:800;
+      text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;
+    }
+    .card-title{margin:0 0 7px;font-size:21px}
+    .card-subtitle{margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+    .field-label{display:block;margin:16px 0 7px;font-size:13px;font-weight:700}
+    .text-input{
+      width:100%;padding:12px 13px;border-radius:10px;border:1px solid var(--line);
+      background:rgba(67,56,202,.7);color:#fff;font-size:16px;outline:none;
+    }
+    .text-input:focus{border-color:#67e8f9;box-shadow:0 0 0 3px rgba(34,211,238,.12)}
+    .start-row{margin-top:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+
+    .progress-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .progress-label{font-size:12px;color:var(--muted)}
+    .progress{height:8px;background:rgba(255,255,255,.07);border-radius:999px;overflow:hidden}
+    .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#22D3EE);width:0%;transition:width .2s ease}
+    .question{font-size:19px;font-weight:700;line-height:1.5;margin-bottom:16px}
+    .choices{display:flex;flex-direction:column;gap:10px}
+    .choice{
+      background:var(--quiz-choice,#4338CA);padding:13px 14px;border-radius:11px;
+      border:1px solid rgba(255,255,255,.06);cursor:pointer;transition:.15s ease;
+      line-height:1.45;
+    }
+    .choice:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.16)}
+    .choice.selected{outline:2px solid rgba(34,211,238,.45);background:var(--quiz-accent,#22D3EE);color:#062b35}
+    .controls{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:20px;flex-wrap:wrap}
+    .control-group{display:flex;gap:8px;align-items:center}
+    button{
+      background:var(--quiz-button,#C084FC);color:#172033;border:0;padding:11px 15px;
+      border-radius:10px;cursor:pointer;font-weight:750;transition:.15s ease;
+    }
+    button:hover{transform:translateY(-1px);filter:brightness(1.04)}
+    button.secondary{background:transparent;border:1px solid var(--line);color:var(--white)}
+    button:focus-visible{outline:3px solid rgba(34,211,238,.35);outline-offset:2px}
+    .footer{margin-top:16px;color:var(--muted);font-size:12px;line-height:1.5}
+    .result{padding:20px;border-radius:14px;background:rgba(2,6,23,.35);border:1px solid var(--line)}
+    .result h2{margin:0 0 6px}
+    .review{margin-top:14px}
+    .q-review{background:rgba(255,255,255,.035);padding:14px;border-radius:12px;margin-bottom:10px;border:1px solid var(--line)}
+    .bottom-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+    .page-actions{text-align:center;margin-top:22px}
+    .page-actions a{display:inline-block;margin:5px}
+    .page-actions button{min-width:150px}
+    .designer{text-align:center;color:var(--muted);font-size:12px;margin-top:16px}
+    .light-toggle{background:transparent!important;border:1px solid var(--line)!important;color:var(--white)!important}
+    body.light-mode{background:#eef2f7;color:#0f172a}
+    body.light-mode header{background:#fff;border-color:#dbe3ec}
+    body.light-mode .card{background:#fff;border-color:#dbe3ec}
+    body.light-mode .choice{background:#e2e8f0;color:#0f172a}
+    body.light-mode .choice.selected{background:#3b82f6;color:#fff}
+    body.light-mode .meta,.light-mode .progress-label,.light-mode .footer,.light-mode .designer{color:#64748b}
+    body.light-mode .brand-tutor{color:#0f172a}
+    body.light-mode .text-input{background:#f8fafc;color:#0f172a;border-color:#cbd5e1}
+    body.light-mode button.secondary,.light-mode .light-toggle{color:#0f172a!important;border-color:#cbd5e1!important}
+    @media(max-width:650px){
+      .wrap{padding:12px 12px 32px}
+      header{align-items:flex-start;padding:14px}
+      .brand-logo-wrap,.brand-logo{width:52px;height:52px}
+      .brand{gap:10px}
+      .quiz-status{width:100%;justify-content:flex-end}
+      header{flex-wrap:wrap}
+      .timer-box{min-width:96px}
+      .card{padding:17px}
+      .question{font-size:17px}
+    }
   </style>
 </head>
 <body>
@@ -75,43 +153,52 @@ body.light-mode button{background:#22c55e;color:white;}
     <header>
       <div class="brand">
         <div class="brand-logo-wrap" id="brand-logo-wrap"></div>
-        <div>
+        <div class="brand-copy">
           <h1 class="h1">GST 112 MCQs Interactive MCQ Quiz PRT7</h1>
-          <div class="meta">30 multiple-choice questions</div>
+          <div class="meta">Loading quiz information...</div>
           <div class="brand-tutor" id="brand-tutor"></div>
         </div>
       </div>
-      <span class="span">Timer: <div class="timer" id="countdown-timer">15:00</div></span>
-    </header><div class="card" id="name-card">
-  <div class="question">Enter your name to begin</div>
-  <input type="text" id="nameInput" placeholder="Enter your name here" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:#4338CA;color:#fff;font-size:16px;box-sizing:border-box" />
-  <div style="margin-top:12px">
-  <div class="question">Enter your Institution name</div>
-  <input type="text" id="institutionInput" placeholder="Enter your institution name here" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:#4338CA;color:#fff;font-size:16px;box-sizing:border-box" />
-</div>
-  <div style="margin-top:12px">
+      <div class="quiz-status">
+        <div class="timer-box">
+          <span class="timer-label">Time left</span>
+          <span class="timer" id="countdown-timer">15:00</span>
+        </div>
+      </div>
+    </header><div class="card intro-card" id="name-card">
+  <span class="eyebrow">Online assessment</span>
+  <h2 class="card-title">Ready to begin?</h2>
+  <p class="card-subtitle">Enter your details below. Your result will be recorded separately when you submit the quiz.</p>
+  <label class="field-label" for="nameInput">Student name</label>
+  <input class="text-input" type="text" id="nameInput" placeholder="Enter your full name" autocomplete="name" />
+  <label class="field-label" for="institutionInput">Institution</label>
+  <input class="text-input" type="text" id="institutionInput" placeholder="Enter your institution name" autocomplete="organization" />
+  <div class="start-row">
     <button id="startQuizBtn">Start Quiz</button>
   </div>
 </div>
 
 <div class="card" id="quiz-card" style="display:none">
-  <div class="progress" aria-hidden><i id="progress-bar"></i></div>
-  <div style="height:14px"></div>
+  <div class="progress-row">
+    <span class="progress-label">Question <span id="q-num">1</span> of <span id="q-total">10</span></span>
+    <span class="progress-label"><span id="progress-percent">0</span>% complete</span>
+  </div>
+  <div class="progress" aria-hidden="true"><i id="progress-bar"></i></div>
+  <div style="height:18px"></div>
   <div id="q-area">
     </div>
 
   <div class="controls">
-    <div style="display:flex;gap:8px">
+    <div class="control-group">
       <button id="prevBtn" class="secondary">Previous</button>
       <button id="nextBtn">Next</button>
     </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <button id="submitBtn" class="secondary">Submit</button>
-      <div style="color:var(--muted);font-size:13px">Q <span id="q-num">1</span> / <span id="q-total">10</span></div>
+    <div class="control-group">
+      <button id="submitBtn" class="secondary">Submit Quiz</button>
     </div>
   </div>
 
-  <div class="footer">Tip: Select an answer and press Next. You can review answers after submission. Quiz will submit automatically once timer turns zero.<br></div>
+  <div class="footer">Select an answer, then use Next or Previous to move between questions. You can review your answers after submission. The quiz submits automatically when the timer reaches zero.</div>
 </div>
 
 <div id="result-area" style="display:none" class="card">
@@ -120,16 +207,17 @@ body.light-mode button{background:#22c55e;color:white;}
     <p id="score-summary" class="meta"></p>
   </div>
   <div class="review" id="review-list"></div>
-  <div style="display:flex;gap:8px;margin-top:12px">
+  <div class="bottom-actions">
     <button id="retryBtn">Retake Quiz</button>
     <button id="exportBtn" class="secondary">Export Results</button>
   </div>
 </div>
-<br><br><br>
-  <a href="https://wa.me/+2349036795652"><button>Contact The Developer</button></a>
-    <a href="https://wa.me/+2349036795652"><button>Support QuizProject</button></a><br><br>
-   <button onclick="shareOnWhatsApp()">Share Quiz link via WhatsApp</button>
-  <h2>Designed by Sanctum</h2>
+<div class="page-actions">
+    <a href="https://wa.me/+2349036795652" target="_blank" rel="noopener"><button>Contact Developer</button></a>
+    <a href="https://wa.me/+2349036795652" target="_blank" rel="noopener"><button>Support Quiz Project</button></a>
+    <button id="shareBtn" class="secondary">Share Quiz</button>
+  </div>
+  <div class="designer">Designed by Sanctum</div>
   </div>
    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="quiz-config.js"></script>
@@ -167,7 +255,7 @@ body.light-mode button{background:#22c55e;color:white;}
        function shareOnWhatsApp() {
   const message = window.location.href;
   const encodedMessage = encodeURIComponent(message);
-  const whatsappUrl = "whatsapp://send?text=" + encodedMessage;
+  const whatsappUrl = "https://wa.me/?text=" + encodedMessage;
   window.open(whatsappUrl, '_blank');
 }
 
@@ -179,8 +267,9 @@ function renderQuestion() {
   const q = QUESTIONS[state.idx];
   document.getElementById('q-num').textContent = state.idx + 1;
   document.getElementById('q-total').textContent = total;
-  const progress = Math.round((state.idx / total) * 100);
+  const progress = Math.round(((state.idx + 1) / total) * 100);
   document.getElementById('progress-bar').style.width = progress + '%';
+  document.getElementById('progress-percent').textContent = progress;
 
   area.innerHTML = '';
   const qEl = document.createElement('div');
@@ -361,7 +450,9 @@ function startCountdown() {
 const toggleBtn = document.createElement("button");
 toggleBtn.textContent = "☀️";
 toggleBtn.style.marginLeft = "10px";
-document.querySelector("header").appendChild(toggleBtn);
+document.querySelector(".quiz-status").appendChild(toggleBtn);
+toggleBtn.className = "light-toggle";
+toggleBtn.setAttribute("aria-label", "Toggle light mode");
 
 toggleBtn.addEventListener("click", () => {
   document.body.classList.toggle("light-mode");
