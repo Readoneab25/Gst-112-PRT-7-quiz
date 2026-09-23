@@ -360,7 +360,13 @@ const QUIZ_NAME = "GST 112 PRT 7";
 
 async function submitResult(score, pct, review) {
   const answers = review.map(function(item) {
-    return { question: item.i, selected: item.user };
+    return {
+      questionNumber: item.i + 1,
+      question: item.q,
+      selectedAnswer: item.user === null ? "No answer" : item.choices[item.user],
+      correctAnswer: item.choices[item.correctIdx],
+      result: item.ok ? "Correct" : "Incorrect"
+    };
   });
 
   const { data, error } = await supabaseClient.rpc("submit_quiz_result", {
