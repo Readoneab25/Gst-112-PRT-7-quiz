@@ -21,7 +21,12 @@
     html,body{height:100%}
     body{margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background: #1E1B4B;color:#FFFF;-webkit-font-smoothing:antialiased}
     .wrap{max-width:920px;margin:28px auto;padding:20px}
-    header{display:flex;align-items:center;gap:16px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:14px;min-width:0}
+    .brand-logo-wrap{width:72px;height:72px;display:flex;align-items:center;justify-content:center;flex:none}
+    .brand-logo{width:72px;height:72px;object-fit:contain;border-radius:50%;background:#fff}
+    .brand-tutor{margin-top:4px;font-size:13px;color:#cbd5e1;font-weight:600}
+
     h1{margin:0;}
     .meta{color:var(--muted);font-size:13px}
     .card{background: #312E81;padding:20px;border-radius:12px;margin-top:18px;box-shadow:0 6px 24px rgba(2,6,23,0.6)}
@@ -68,12 +73,15 @@ body.light-mode button{background:#22c55e;color:white;}
 <body>
   <div class="wrap">
     <header>
-      <div>
-        <h1 class="h1">GST 112 MCQs Interactive MCQ Quiz PRT7</h1>
-        <div class="meta">30 multiple-choice questions </div>
- 
-                 <span class="span">Timer: <div class="timer" id="countdown-timer">15:00</div></span>
+      <div class="brand">
+        <div class="brand-logo-wrap" id="brand-logo-wrap"></div>
+        <div>
+          <h1 class="h1">GST 112 MCQs Interactive MCQ Quiz PRT7</h1>
+          <div class="meta">30 multiple-choice questions</div>
+          <div class="brand-tutor" id="brand-tutor"></div>
+        </div>
       </div>
+      <span class="span">Timer: <div class="timer" id="countdown-timer">15:00</div></span>
     </header><div class="card" id="name-card">
   <div class="question">Enter your name to begin</div>
   <input type="text" id="nameInput" placeholder="Enter your name here" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:#4338CA;color:#fff;font-size:16px;box-sizing:border-box" />
@@ -137,6 +145,13 @@ body.light-mode button{background:#22c55e;color:white;}
 
        // Apply reusable quiz configuration after the question bank exists.
        document.title = QUIZ_CONFIG.title + " — Sanctum Quiz";
+       const logoWrap = document.getElementById("brand-logo-wrap");
+       const tutorLabel = document.getElementById("brand-tutor");
+       if (QUIZ_CONFIG.logo) {
+         logoWrap.innerHTML = '<img class="brand-logo" src="' + QUIZ_CONFIG.logo + '" alt="' + QUIZ_CONFIG.tutorName + ' logo">';
+       }
+       if (QUIZ_CONFIG.tutorName) tutorLabel.textContent = QUIZ_CONFIG.tutorName;
+
        const heading = document.querySelector('.h1');
        if (heading) heading.textContent = QUIZ_CONFIG.title;
        const meta = document.querySelector('.meta');
