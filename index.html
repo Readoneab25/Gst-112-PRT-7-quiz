@@ -145,7 +145,12 @@ body.light-mode button{background:#22c55e;color:white;}
 
        // Apply reusable quiz configuration after the question bank exists.
        document.title = QUIZ_CONFIG.title + " — Sanctum Quiz";
-       document.documentElement.style.setProperty("--quiz-bg", QUIZ_CONFIG.colors.background);\n       document.documentElement.style.setProperty("--quiz-card", QUIZ_CONFIG.colors.card);\n       document.documentElement.style.setProperty("--quiz-choice", QUIZ_CONFIG.colors.choice);\n       document.documentElement.style.setProperty("--quiz-accent", QUIZ_CONFIG.colors.accent);\n       document.documentElement.style.setProperty("--quiz-button", QUIZ_CONFIG.colors.button);\n       const logoWrap = document.getElementById("brand-logo-wrap");
+       document.documentElement.style.setProperty("--quiz-bg", QUIZ_CONFIG.colors.background);
+       document.documentElement.style.setProperty("--quiz-card", QUIZ_CONFIG.colors.card);
+       document.documentElement.style.setProperty("--quiz-choice", QUIZ_CONFIG.colors.choice);
+       document.documentElement.style.setProperty("--quiz-accent", QUIZ_CONFIG.colors.accent);
+       document.documentElement.style.setProperty("--quiz-button", QUIZ_CONFIG.colors.button);
+       const logoWrap = document.getElementById("brand-logo-wrap");
        const tutorLabel = document.getElementById("brand-tutor");
        if (QUIZ_CONFIG.logo) {
          logoWrap.innerHTML = '<img class="brand-logo" src="' + QUIZ_CONFIG.logo + '" alt="' + QUIZ_CONFIG.tutorName + ' logo">';
@@ -366,11 +371,20 @@ toggleBtn.addEventListener("click", () => {
   const review = window._lastReview || [];
   const score = window._lastScore ?? 0;
   const pct = window._lastPct ?? 0;
-  let text = `${QUIZ_NAME} Quiz Results\nScore: ${score} / ${total} (${pct}%)\nDate: ${new Date().toLocaleString()}\n\n`;
+  let text = `${QUIZ_NAME} Quiz Results
+Score: ${score} / ${total} (${pct}%)
+Date: ${new Date().toLocaleString()}
+
+`;
   review.forEach(item => {
     const ua = item.user === null ? 'No answer' : String.fromCharCode(65 + item.user) + '. ' + item.choices[item.user];
     const ca = String.fromCharCode(65 + item.correctIdx) + '. ' + item.choices[item.correctIdx];
-    text += `${item.i + 1}. ${item.q}\nYour answer: ${ua}\nCorrect answer: ${ca}\nResult: ${item.ok ? 'Correct' : 'Incorrect'}\n\n`;
+    text += `${item.i + 1}. ${item.q}
+Your answer: ${ua}
+Correct answer: ${ca}
+Result: ${item.ok ? 'Correct' : 'Incorrect'}
+
+`;
   });
   const blob = new Blob([text], { type: 'text/plain' });
   const url = URL.createObjectURL(blob);
