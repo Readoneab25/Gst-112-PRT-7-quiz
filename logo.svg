@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<defs>
+  <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b63ce"/><stop offset="1" stop-color="#102b70"/></linearGradient>
+  <linearGradient id="orange" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f97316"/><stop offset="1" stop-color="#f5a400"/></linearGradient>
+</defs>
+<rect width="512" height="512" fill="white"/>
+<circle cx="256" cy="256" r="218" fill="none" stroke="url(#blue)" stroke-width="13" stroke-dasharray="690 120"/>
+<path d="M111 344c-30 25-34 63-7 90m28-112c-25 23-28 54-7 77m35-103c-22 18-24 46-8 65" fill="none" stroke="#0b63ce" stroke-width="10" stroke-linecap="round"/>
+<path d="M401 344c30 25 34 63 7 90m-28-112c25 23 28 54 7 77m-35-103c22 18 24 46 8 65" fill="none" stroke="#f59e0b" stroke-width="10" stroke-linecap="round"/>
+<path d="M185 135 256 103 327 135 256 168Z" fill="url(#blue)"/>
+<path d="M210 150v43l46 25 46-25v-43l-46 20Z" fill="url(#blue)"/>
+<path d="M206 223c32-34 68-34 100 0-32-16-68-16-100 0Z" fill="url(#orange)"/>
+<path d="M205 224c34-8 68-8 102 0-34 10-68 10-102 0Z" fill="#0b63ce"/>
+<text x="256" y="305" text-anchor="middle" font-family="Georgia,serif" font-size="132" font-weight="700" fill="url(#blue)">J</text>
+<text x="300" y="305" text-anchor="middle" font-family="Georgia,serif" font-size="132" font-weight="700" fill="url(#orange)">V</text>
+<text x="361" y="305" text-anchor="middle" font-family="Georgia,serif" font-size="132" font-weight="700" fill="url(#blue)">A</text>
+<text x="256" y="345" text-anchor="middle" font-family="Georgia,serif" font-size="25" letter-spacing="6" font-weight="700" fill="#122b68">JAMB VANGUARD</text>
+<text x="256" y="375" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" letter-spacing="9" fill="#e76b12">ACADEMY</text>
+<path d="M190 405h55m72 0h-55" stroke="#f59e0b" stroke-width="5"/>
+<text x="256" y="437" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" letter-spacing="3" fill="#17366f">LEARN • PREPARE • EXCEL</text>
+</svg>
