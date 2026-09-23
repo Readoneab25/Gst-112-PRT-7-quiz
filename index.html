@@ -19,7 +19,7 @@
   <style>
     :root{--bg:#0f172a;--card:#111827;--accent:#06b6d4;--muted:#94a3b8;--white:#e6eef6}
     html,body{height:100%}
-    body{margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background: #1E1B4B;color:#FFFF;-webkit-font-smoothing:antialiased}
+    body{margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background:var(--quiz-bg,#1E1B4B);color:#FFFF;-webkit-font-smoothing:antialiased}
     .wrap{max-width:920px;margin:28px auto;padding:20px}
     header{display:flex;align-items:center;justify-content:space-between;gap:16px}
     .brand{display:flex;align-items:center;gap:14px;min-width:0}
@@ -29,14 +29,14 @@
 
     h1{margin:0;}
     .meta{color:var(--muted);font-size:13px}
-    .card{background: #312E81;padding:20px;border-radius:12px;margin-top:18px;box-shadow:0 6px 24px rgba(2,6,23,0.6)}
+    .card{background:var(--quiz-card,#312E81);padding:20px;border-radius:12px;margin-top:18px;box-shadow:0 6px 24px rgba(2,6,23,0.6)}
     .question{font-size:18px;margin-bottom:12px}
     .choices{display:flex;flex-direction:column;gap:8px}
-    .choice{background: #4338CA;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);cursor:pointer}
+    .choice{background:var(--quiz-choice,#4338CA);padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);cursor:pointer}
     .choice:hover{transform:translateY(-2px)}
-    .choice.selected{outline:3px solid rgba(6,182,212,0.12);background: #22D3EE;}
+    .choice.selected{outline:3px solid rgba(6,182,212,0.12);background:var(--quiz-accent,#22D3EE);}
     .controls{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
-    button{background:#C084FC;color:#042029;border:0;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600}
+    button{background:var(--quiz-button,#C084FC);color:#042029;border:0;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600}
     button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--white)}
     .progress{height:10px;background:rgba(255,255,255,0.04);border-radius:999px;overflow:hidden}
     .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#22D3EE);width:0%}
@@ -145,7 +145,7 @@ body.light-mode button{background:#22c55e;color:white;}
 
        // Apply reusable quiz configuration after the question bank exists.
        document.title = QUIZ_CONFIG.title + " — Sanctum Quiz";
-       const logoWrap = document.getElementById("brand-logo-wrap");
+       document.documentElement.style.setProperty("--quiz-bg", QUIZ_CONFIG.colors.background);\n       document.documentElement.style.setProperty("--quiz-card", QUIZ_CONFIG.colors.card);\n       document.documentElement.style.setProperty("--quiz-choice", QUIZ_CONFIG.colors.choice);\n       document.documentElement.style.setProperty("--quiz-accent", QUIZ_CONFIG.colors.accent);\n       document.documentElement.style.setProperty("--quiz-button", QUIZ_CONFIG.colors.button);\n       const logoWrap = document.getElementById("brand-logo-wrap");
        const tutorLabel = document.getElementById("brand-tutor");
        if (QUIZ_CONFIG.logo) {
          logoWrap.innerHTML = '<img class="brand-logo" src="' + QUIZ_CONFIG.logo + '" alt="' + QUIZ_CONFIG.tutorName + ' logo">';
