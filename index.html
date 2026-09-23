@@ -132,6 +132,15 @@ body.light-mode button{background:#22c55e;color:white;}
 
 
 
+       // Apply reusable quiz configuration to the page.
+       document.title = QUIZ_CONFIG.title + " — Sanctum Quiz";
+       const heading = document.querySelector('.h1');
+       if (heading) heading.textContent = QUIZ_CONFIG.title;
+       const meta = document.querySelector('.meta');
+       if (meta) meta.textContent = QUIZ_CONFIG.subject + " • " + QUIZ_CONFIG.quizNumber + " • " + QUESTIONS.length + " multiple-choice questions";
+       const timerLabel = document.querySelector('.timer');
+       if (timerLabel) timerLabel.textContent = String(QUIZ_CONFIG.timeMinutes).padStart(2, '0') + ':00';
+
        const QUESTIONS = [
 
 
