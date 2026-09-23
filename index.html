@@ -390,7 +390,12 @@ function showResult(score, review) {
   const pct = Math.round((score / total) * 100);
   document.getElementById('score-summary').textContent = `Percentage: ${pct}%`;
 
-  sendScoreToAdmin(score, pct);
+  submitResult(score, pct, review).then(function(result) {
+    if (result?.result_token) {
+      window._resultToken = result.result_token;
+      localStorage.setItem("sv_last_quiz_result_token", result.result_token);
+    }
+  });
   window._lastReview = review;
   window._lastScore = score;
   window._lastPct = pct;
